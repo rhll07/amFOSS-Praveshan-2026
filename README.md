@@ -38,10 +38,10 @@ to learn effectively, which is essential for every engineer.
 | :-----: | ---------------- | :---------: |
 | Task 00 |Install Linux|✅|
 | Task 01 |Git Exercises|✅|
-| Task 02 |Prologue – The Logbook of the Grand Line|⏳|
+| Task 02 |Prologue – The Logbook of the Grand Line|✅|
 | Task 03 |The Grand Line Restoration Initiative|⏳|
-| Task 04 |The Pirate King's Challenge|⏳|
-| Task 05 |Grand Line Guardian|⏳|
+| Task 04 |The Pirate King's Challenge|✅|
+| Task 05 |Grand Line Guardian|✅|
 | Task 06 |Pirate King's Scheduler|✅|
 | Task 07 |Dank Memer Discord Bot|⏳|
 | Task 08 |The Ohara Archive|⏳|
