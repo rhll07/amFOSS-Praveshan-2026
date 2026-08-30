@@ -1,41 +1,51 @@
-# Task 05 — Grand Line Guardian
+# Task 05 - Grand Line Guardian
 
-A tiny terminal process monitor, htop-style but as simple as possible. It shows
-a live table of every running process on the machine and keeps refreshing it
-about twice a second while you watch.
+A terminal-based Linux process monitoring tool inspired by utilities such as `htop` and `btop++`.
 
-Every row is a "ship" sailing the Grand Line:
+Grand Line Guardian continuously displays the processes currently running on the system and refreshes the information every 0.5 seconds.
 
-```
-GRAND LINE GUARDIAN   Active Processes: 358
-PID        NAME                         CPU%   MEM%
-1          systemd                        0.0    0.2
-2          kthreadd                       0.0    0.0
-842        gnome-shell                    2.4    3.2
-1234       firefox                        8.7    5.1
-...
-```
+## Features
 
-## What it shows
+### Mandatory
 
-For each process (well, for each one we can read, more on that below):
+- Process ID (PID)
+- Process name
+- CPU usage
+- Memory usage
+- Total active process count
+- Terminal-based interface
+- Real-time updates at a 0.5-second interval
 
-- PID — the numeric process id
-- Name — the process name
-- CPU % — how much of one core the process is using
-- MEM % — what share of total RAM it's consuming
+### Optional features implemented
 
-On top there's the total active process count, which updates every frame.
+- Navigate through the process list using the keyboard
+- Move one process at a time with `↑` / `↓`
+- Move one process at a time with `j` / `k`
+- Move one screen at a time with `Page Up` / `Page Down`
+- Jump to the first process with `Home`
+- Jump to the last process with `End`
+- Quit with `q`
 
-## Installing
+Process termination was not implemented because it is optional.
 
-The only dependency is `psutil`:
+## Requirements
+
+- Linux
+- Python 3
+- `psutil`
+- A terminal environment with curses support
+
+## Installation
 
 ```bash
 pip install -r requirements.txt
 ```
 
-(Or `pip3 install psutil` if you're not using a virtualenv.)
+Alternatively:
+
+```bash
+pip3 install psutil
+```
 
 ## Running
 
@@ -43,102 +53,163 @@ pip install -r requirements.txt
 python3 monitor.py
 ```
 
-Press `Ctrl+C` to stop it.
+The monitor refreshes every 0.5 seconds. Press `q` to exit.
 
-## How it works
+## Example
 
-### Getting the process info
-
-`psutil` does the heavy lifting. For each process it reports the PID, name,
-CPU% and memory%. I call `cpu_percent()` and `memory_percent()` inside
-`p.oneshot()`, which caches all the process info from one `/proc` read instead
-of reading it several times separately — a small performance win.
-
-One gotcha: `psutil`'s `cpu_percent()` returns 0 the first time you call it for
-a process and the real value on later calls, because it compares CPU time
-between two snapshots. So the table shows 0.0 on the very first frame and real
-numbers from then on. That's normal and how tools like htop behave.
-
-The program prints text to the terminal using `curses`. `curses` gives us
-"draw at this row and column" control, so we can overwrite the same lines each
-tick instead of printing an endless scroll.
-
-### The refresh loop
-
-The whole thing is one `while True` loop:
-
-1. Erase the screen.
-2. Loop over all processes and collect their info (skipping any that fail).
-3. Print the table.
-4. `time.sleep(0.5)` and repeat.
-
-So it redraws roughly twice a second. Every redraw is a fresh read, so the
-numbers and the process list stay current.
-
-## How it survives dying / unreadable processes
-
-The Linux process list changes constantly — processes exit while we're reading
-them, and some (like root-owned system daemons) refuse to give us info, plus a
-few are zombie processes that have exited but are waiting for their parent.
-
-If we didn't handle these, the program would throw and crash the moment any
-process disappeared. So the per-process read is wrapped in a try/except that
-catches exactly the three relevant errors from `psutil`:
-
-- `NoSuchProcess` — the process ended between the list and our read
-- `AccessDenied` — the OS won't let us read it
-- `ZombieProcess` — the process is already dead but not yet reaped
-
-Any process that errors out is simply skipped and we move on to the next one.
-The monitor keeps going and never crashes. The terminal resize is handled by
-curses, and I use `getmaxyx()` to keep lines from spilling past the screen edge.
-
-## The Linux `/proc` concept
-
-The reason `psutil` can do this at all is the Linux **virtual filesystem** at
-`/proc`. On Linux, there's no "API call" to list processes — instead the kernel
-exposes almost everything as files and directories under `/proc`.
-
-Each running process has a directory `/proc/<pid>` (e.g. `/proc/1234`) filled
-with files describing it: `name`, `cmdline`, `stat`, `status`, `meminfo` and so
-on. `psutil` reads these files (and `/proc/stat` for global CPU numbers) and
-gives us a clean Python API on top.
-
-`process_iter`/`cpu_percent` are just a friendly wrapper around that same
-kernel interface. So "process management and the Linux kernel interface" here
-means: the kernel stores live process state in `/proc`, and we read it through
-`psutil`.
-
-You *could* read `/proc` directly with plain Python, but `psutil` already
-handles all the parsing and edge cases (including the NoSuchProcess /
-AccessDenied cases above), so for this task using it is the clean choice.
-
-## Files
-
-```
-Task-05/
-├── monitor.py       # the whole program
-├── requirements.txt # psutil
-└── README.md
+```text
+GRAND LINE GUARDIAN   Active Processes: 380
+PID        NAME                         CPU%   MEM%
+1          systemd                       0.0     0.2
+2          kthreadd                      0.0     0.0
+3          pool_workqueue_release        0.0     0.0
+4          kworker/R-rcu_gp              0.0     0.0
+...
 ```
 
-## Resources
+When there are more processes than fit on the terminal, the list can be navigated using the keyboard controls.
 
-- [psutil docs](https://psutil.readthedocs.io/) — process_iter, cpu_percent,
-  memory_percent, oneshot
-- [Python curses docs](https://docs.python.org/3/howto/curses.html)
-- `man 5 proc` — describes what the `/proc` filesystem contains
+## Approach
 
-## Things I learned
+The application is implemented in Python using:
 
-- The first `cpu_percent()` call always returns 0 until there's a second call
-  to compare against.
-- `p.oneshot()` batches all the `/proc` reads for a single process into one
-  pass, which is notably faster.
-- Curses lets you place text at exact coordinates, which is how in-place
-  terminals GUIs (htop, btop, vim status lines) work under the hood.
-- How insanely volatile the process list is — you really do get
-  `NoSuchProcess`/`AccessDenied` constantly on a busy system, so every tool
-  that lists processes has to tolerate those errors.
-- `/proc` isn't real disk storage; it's a view into kernel state, which is why
-  it works for live monitoring.
+- `psutil` for process and system information
+- Python's `curses` module for the terminal interface
+
+The monitoring loop:
+
+1. Enumerates running processes.
+2. Collects PID and process name.
+3. Calculates CPU and memory usage.
+4. Counts active PIDs.
+5. Draws the current process list.
+6. Reads keyboard input for navigation.
+7. Waits 0.5 seconds.
+8. Repeats.
+
+This keeps the process information live while allowing the user to move through the list.
+
+## Process Information with psutil
+
+`psutil.process_iter()` is used to enumerate processes:
+
+```python
+psutil.process_iter(["pid", "name"])
+```
+
+For each process, `oneshot()` is used while collecting information. CPU usage is obtained with:
+
+```python
+process.cpu_percent(interval=None)
+```
+
+and memory usage with:
+
+```python
+process.memory_percent()
+```
+
+The CPU value is divided by the number of logical CPUs so the displayed value represents usage relative to the whole machine.
+
+The first CPU measurement for a process can be `0.0` because CPU percentage is calculated from a comparison between measurements. Later refreshes provide meaningful values.
+
+## Handling Processes That Disappear
+
+The process list can change while it is being read. A process may terminate between enumeration and information retrieval, or access may be denied.
+
+The application handles:
+
+- `psutil.NoSuchProcess`
+- `psutil.AccessDenied`
+- `psutil.ZombieProcess`
+
+Processes that cannot be read are skipped rather than crashing the monitor.
+
+## Terminal Interface
+
+Python's `curses` module is used to create the live terminal interface.
+
+It provides:
+
+- Screen clearing and redrawing
+- Position-based text output
+- Keyboard input
+- Terminal dimension detection
+- A viewport for the process list
+
+Only processes that fit in the current terminal window are displayed at once.
+
+## Scrolling
+
+A scroll offset is maintained when the process list is larger than the terminal.
+
+| Key | Action |
+|---|---|
+| `↑` / `j` | Move up one process |
+| `↓` / `k` | Move down one process |
+| `Page Up` | Move up one screen |
+| `Page Down` | Move down one screen |
+| `Home` | Jump to the beginning |
+| `End` | Jump to the end |
+| `q` | Quit |
+
+The process information continues to refresh while navigating.
+
+## Linux `/proc` and the Kernel Interface
+
+Linux exposes live operating-system information through the virtual `/proc` filesystem.
+
+Each process normally has a directory such as:
+
+```text
+/proc/<PID>/
+```
+
+which contains kernel-provided information about that process. Examples include:
+
+```text
+/proc/<PID>/stat
+/proc/<PID>/status
+/proc/<PID>/cmdline
+```
+
+System-wide CPU and memory information is also exposed through `/proc`.
+
+`psutil` provides a higher-level Python interface over these operating-system facilities, so this project does not need to manually parse `/proc`.
+
+Understanding the relationship between kernel state, `/proc`, and process-monitoring tools was an important part of the task.
+
+## Refresh Strategy
+
+The refresh interval is:
+
+```python
+REFRESH = 0.5
+```
+
+The application therefore redraws approximately twice per second, satisfying the requirement for real-time updates or an update interval below one second.
+
+## Resources Used
+
+- psutil documentation: https://psutil.readthedocs.io/
+- Python curses documentation: https://docs.python.org/3/library/curses.html
+- Linux `/proc` documentation: `man 5 proc`
+
+## New Concepts Learned
+
+- Process enumeration and monitoring with `psutil`
+- PID and process lifecycle concepts
+- CPU and memory usage measurement
+- The Linux `/proc` virtual filesystem
+- The relationship between kernel process state and `/proc`
+- Handling `NoSuchProcess`, `AccessDenied`, and `ZombieProcess`
+- Using `curses` to build terminal user interfaces
+- Reading keyboard input in a live terminal application
+- Implementing scrolling over a continuously refreshed process list
+- Periodic refresh loops for real-time monitoring
+
+## Limitations
+
+- Process termination is not implemented because it is optional.
+- A process that disappears or cannot be accessed during collection is skipped.
+- The application is intentionally lightweight rather than a full replacement for `htop` or `btop++`.
