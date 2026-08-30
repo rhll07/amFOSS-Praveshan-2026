@@ -1,12 +1,8 @@
 # Task-01 — Git Exercises
 
-> My notes while completing the Git Exercises.
-> I tried to write down what I actually used/understood instead of just dumping commands.
+This Directory contains my notes while completing the Git Exercises.
 
-I completed the **git-exercises by fracz** set, which has 22 Git challenges.
-
-I did everything inside the `exercises/` directory. The repo comes with the `git start`,
-`git verify` and `git exercises` helper commands, which made it easier to move through the exercises.
+I completed the **git-exercises by fracz** set, which has 23 Git challenges.
 
 ---
 
