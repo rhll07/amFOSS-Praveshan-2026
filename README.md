@@ -34,19 +34,17 @@ to learn effectively, which is essential for every engineer.
 
 ## Task Progress
 
-|   Task  | Description      |    Status   |
-| :-----: | ---------------- | :---------: |
-| Task 00 |Install Linux|✅|
-| Task 01 |Git Exercises|✅|
-| Task 02 |Prologue – The Logbook of the Grand Line|✅|
-| Task 03 |The Grand Line Restoration Initiative|⏳|
-| Task 04 |The Pirate King's Challenge|✅|
-| Task 05 |Grand Line Guardian|✅|
-| Task 06 |Pirate King's Scheduler|✅|
-| Task 07 |Dank Memer Discord Bot|⏳|
-| Task 08 |The Ohara Archive|⏳|
-| Task 09 |One Piece Memory Matcher|⏳|
-| Task 10 |Surprise US|✅|
-| Task 11 |TimeFlow Wallpaper Sync|✅|
-
-> **Note:** The table above will be updated as tasks are completed and documented.
+| Task | Description | Status |
+|---|---|---|
+| [Task 00](./Task-00) | Install Linux | ✅ |
+| [Task 01](./Task-01) | Git Exercises | ✅ |
+| [Task 02](./Task-02) | Prologue – The Logbook of the Grand Line | ✅ |
+| [Task 03](./Task-03) | The Grand Line Restoration Initiative | ⏳ |
+| [Task 04](./Task-04) | The Pirate King's Challenge | ✅ |
+| [Task 05](./Task-05) | Grand Line Guardian | ✅ |
+| [Task 06](./Task-06) | Pirate King's Scheduler | ✅ |
+| [Task 07](./Task-07) | Dank Memer Discord Bot | ⏳ |
+| [Task 08](./Task-08) | The Ohara Archive | ⏳ |
+| [Task 09](./Task-09) | One Piece Memory Matcher | ⏳ |
+| [Task 10](./Task-10) | Surprise US | ✅ |
+| [Task 11](./Task-11) | TimeFlow Wallpaper Sync | ✅ |
