@@ -46,7 +46,7 @@ to learn effectively, which is essential for every engineer.
 | Task 07 |Dank Memer Discord Bot|⏳|
 | Task 08 |The Ohara Archive|⏳|
 | Task 09 |One Piece Memory Matcher|⏳|
-| Task 10 |Surprise US|⏳|
+| Task 10 |Surprise US|✅|
 | Task 11 |TimeFlow Wallpaper Sync|✅|
 
 > **Note:** The table above will be updated as tasks are completed and documented.
