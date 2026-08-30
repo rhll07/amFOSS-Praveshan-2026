@@ -1,4 +1,4 @@
-# Task-04: The Pirate King's Challenge 🏴‍☠️
+# Task-04: The Pirate King's Challenge
 
 This task was basically five competitive programming problems from Codeforces.
 
