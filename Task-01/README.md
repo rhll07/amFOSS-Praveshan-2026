@@ -429,4 +429,4 @@ commit contains `jackass` while its parent does not.
 
 ## Proof of completion
 
-[!Proof of completion](Congratulations.png)
+![Proof of completion](Congratulations.png)
