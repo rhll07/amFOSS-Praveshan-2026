@@ -36,17 +36,17 @@ to learn effectively, which is essential for every engineer.
 
 |   Task  | Description      |    Status   |
 | :-----: | ---------------- | :---------: |
-| Task 00 |Install Linux| ✅ Completed |
-| Task 01 |Git Exercises|  ⏳ Pending  |
-| Task 02 |Prologue – The Logbook of the Grand Line|  ⏳ Pending  |
-| Task 03 |The Grand Line Restoration Initiative|  ⏳ Pending  |
-| Task 04 |The Pirate King's Challenge|  ⏳ Pending  |
-| Task 05 |Grand Line Guardian|  ⏳ Pending  |
-| Task 06 |Pirate King's Scheduler|  ⏳ Pending  |
-| Task 07 |Dank Memer Discord Bot|  ⏳ Pending  |
-| Task 08 |The Ohara Archive|  ⏳ Pending  |
-| Task 09 |One Piece Memory Matcher|  ⏳ Pending  |
-| Task 10 |Surprise US|⏳ Pending  |
-| Task 11 |TimeFlow Wallpaper Sync |⏳ Pending  |
+| Task 00 |Install Linux|✅|
+| Task 01 |Git Exercises|✅|
+| Task 02 |Prologue – The Logbook of the Grand Line|⏳|
+| Task 03 |The Grand Line Restoration Initiative|⏳|
+| Task 04 |The Pirate King's Challenge|⏳|
+| Task 05 |Grand Line Guardian|⏳|
+| Task 06 |Pirate King's Scheduler|✅|
+| Task 07 |Dank Memer Discord Bot|⏳|
+| Task 08 |The Ohara Archive|⏳|
+| Task 09 |One Piece Memory Matcher|⏳|
+| Task 10 |Surprise US|⏳|
+| Task 11 |TimeFlow Wallpaper Sync|✅|
 
 > **Note:** The table above will be updated as tasks are completed and documented.
