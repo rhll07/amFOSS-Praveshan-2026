@@ -1,29 +1,12 @@
 # Task-01 — Git Exercises
 
-> My notes while completing the Git Exercises.  
+> My notes while completing the Git Exercises.
 > I tried to write down what I actually used/understood instead of just dumping commands.
 
 I completed the **git-exercises by fracz** set, which has 22 Git challenges.
 
 I did everything inside the `exercises/` directory. The repo comes with the `git start`,
 `git verify` and `git exercises` helper commands, which made it easier to move through the exercises.
-
-## Quick note on the setup
-
-| Command | What it does |
-| --- | --- |
-| `git start <exercise>` | Checks out the exercise branch, resets it to the original state and runs that exercise's `start.sh` which sets up the puzzle files/commits. |
-| `git verify <exercise>` | Force-pushes your current `HEAD` to the server (`git push -f origin HEAD:<exercise>`). The server runs a hidden verification hook, replies `PASSED`/`FAILED` and, on success, tells you the next exercise. |
-| `git start next` | Asks the server which exercise to do next and starts it. |
-
-The server uses the committer email to identify the submissions, so I kept my Git config consistent.
-
-I completed the exercises in this order:
-`master`, `commit-one-file`, `commit-one-file-staged`, `ignore-them`, `chase-branch`,
-`merge-conflict`, `save-your-work`, `change-branch-history`, `remove-ignored`,
-`case-sensitive-filename`, `fix-typo`, `forge-date`, `fix-old-typo`, `commit-lost`,
-`split-commit`, `too-many-commits`, `executable`, `commit-parts`, `pick-your-features`,
-`rebase-complex`, `invalid-order`, `find-swearwords`, `find-bug`.
 
 ---
 
@@ -98,7 +81,7 @@ git verify
 ```bash
 git start save-your-work
 git stash
-# remove the line "THIS IS A BUG - remove the whole line to fix it." from bug.txt
+# removed the line "THIS IS A BUG - remove the whole line to fix it." from bug.txt
 git commit -am "Fix a bug"
 git stash pop
 echo "Finally, finished it!" >> bug.txt
@@ -148,9 +131,9 @@ git verify
 
 ```bash
 git start fix-typo
-# edit file.txt: change "Hello wordl" into "Hello world"
+# edited file.txt: changed "Hello wordl" into "Hello world"
 git commit -a --amend
-# in the editor, also change the message "Add Hello wordl" → "Add Hello world"
+# in the editor, also changed the message "Add Hello wordl" to "Add Hello world"
 git verify
 ```
 
@@ -171,8 +154,8 @@ git verify
 ```bash
 git start fix-old-typo
 git rebase -i HEAD~2
-# in the todo list change the "pick" line of "Add Hello wordl" to "edit", save & exit
-#   now fix file.txt: "Hello wordl" → "Hello world"
+# in the todo list changed the "pick" line of "Add Hello wordl" to "edit", save & exit
+#   now fixed file.txt: "Hello wordl" to "Hello world"
 git add file.txt
 git commit --amend -m "Add Hello world"     # fix the old commit's message too
 git rebase --continue
@@ -191,7 +174,7 @@ git verify
 ```bash
 git start commit-lost
 git reflog
-# find the commit whose message is "Very imporant piece of work", note its hash (shown as HEAD@{1})
+# found the commit whose message is "Very imporant piece of work", note its hash (shown as HEAD@{1})
 git reset --hard HEAD@{1}
 git verify
 ```
@@ -217,15 +200,11 @@ git verify
 ```bash
 git start too-many-commits
 git rebase -i HEAD~2
-# change the second line's "pick" to "f" (fixup), save & exit
+# changed the second line's "pick" to "f" (fixup), save & exit
 git verify
 ```
 
 **What I understood:** There were two commits that should really have been one. I used interactive rebase with `fixup` to combine them while keeping the first commit message.
-
-*(Alternative without an editor: `git reset --soft HEAD~2 && git commit -m "Add file.txt"` — the
-`--soft` reset moves the branch back two commits but keeps the index, so the new single commit has the
-same tree.)*
 
 ## 17. executable
 
@@ -244,7 +223,7 @@ git verify
 git start commit-parts
 git add -p file.txt
 # The hunks get split with 's'; answer:
-#   (1/4) y        -> stage "I forgot to add file header."          (task 1)
+#   (1/4) y        -> stage "I forgot to add file header."         (task 1)
 #   (2/4) y        -> stage the two "task 1" lines                 (task 1)
 #   (3/4) n        -> skip "It works!" + "task 2" line             (leave for 2nd commit)
 #   (4/4) y        -> stage "Task 1 is finished."                  (task 1)
@@ -262,7 +241,7 @@ git start pick-your-features
 git cherry-pick feature-a
 git cherry-pick feature-b
 git cherry-pick feature-c
-# CONFLICT in program.txt — resolve it, keeping both sides:
+# CONFLICT in program.txt — resolved it, keeping both sides:
 #   This is complete feature B
 #   This is base version of the program.
 #   It has only two lines at the beginning.
@@ -291,7 +270,7 @@ git verify
 ```bash
 git start invalid-order
 git rebase -i HEAD~2
-# swap the two lines so that "This should be the second commit" is on top, save & exit
+# swapped the two lines so that "This should be the second commit" is on top, save & exit
 git verify
 ```
 
@@ -304,12 +283,12 @@ occurs. The server checks commit order + file contents (`first.txt` → `1` belo
 ```bash
 git start find-swearwords
 git log -S shit --oneline
-# note the 3 commits that introduced "shit" (use the OLDEST one as the rebase base)
+# noted the 3 commits that introduced "shit" (used the OLDEST one as the rebase base)
 git rebase -i <oldest-shit-commit>^
-# in the todo list change "pick" to "edit" for those 3 commits, save & exit
+# in the todo list changed "pick" to "edit" for those 3 commits, save & exit
 #   at each of the 3 stops:
 #     sed -i 's/shit/flower/' <words.txt or list.txt>   (the file containing the word)
-#     git add <that file>
+#     git add .
 #     git commit --amend --no-edit
 #     git rebase --continue
 git verify
@@ -344,20 +323,6 @@ commit contains `jackass` while its parent does not.
 
 ---
 
-## Things that confused me
-
-1. **`git add -p`** — At first the changes were grouped together, so I had to use `s` to split the hunks and then choose what to stage with `y`/`n`.
-
-2. **Cherry-pick conflict** — `feature-c` conflicted with the changes already on my branch. I kept the required lines and continued the cherry-pick.
-
-3. **Interactive rebase** — The rebase todo list was confusing at first, especially when using `edit` and `fixup`. Checking `git log --oneline` after each change helped a lot.
-
-4. **Finding the bug in history** — The last task would have been horrible manually. `git bisect run` reduced it to a small automated search.
-
-5. **Lost commits** — I didn't realize `git reflog` could recover the previous `HEAD` so easily. That was a useful thing to learn.
-
----
-
 ## Proof of completion
 
 ![Proof of completion](Congratulations.png)
@@ -365,8 +330,5 @@ commit contains `jackass` while its parent does not.
 ## What I got from this task
 
 This task started pretty simple, but the later exercises got much more interesting.
-I got to use things I hadn't really used before, especially `rebase`, `reflog`, `cherry-pick`,
+I got to practice things I hadn't really used before, especially `rebase`, `reflog`, `cherry-pick`,
 `git add -p` and `git bisect`.
-
-The biggest takeaway for me is that Git is not just about `add`, `commit` and `push`.
-Being able to actually understand and change history is a completely different level of Git.
