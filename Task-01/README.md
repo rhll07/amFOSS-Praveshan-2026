@@ -1,11 +1,14 @@
 # Task-01 — Git Exercises
 
-This folder contains my attempt at the **git-exercises by fracz** (`https://gitexercises.fracz.com`), a
-set of 22 real-world Git challenges. Everything was done inside the `exercises/` directory, which is a
-clone of `https://gitexercises.fracz.com/git/exercises.git` configured with the helper aliases
-`git start`, `git verify` and `git exercises` (setup done by `configure.sh`).
+> My notes while completing the Git Exercises.  
+> I tried to write down what I actually used/understood instead of just dumping commands.
 
-## How the platform works
+I completed the **git-exercises by fracz** set, which has 22 Git challenges.
+
+I did everything inside the `exercises/` directory. The repo comes with the `git start`,
+`git verify` and `git exercises` helper commands, which made it easier to move through the exercises.
+
+## Quick note on the setup
 
 | Command | What it does |
 | --- | --- |
@@ -13,10 +16,9 @@ clone of `https://gitexercises.fracz.com/git/exercises.git` configured with the 
 | `git verify <exercise>` | Force-pushes your current `HEAD` to the server (`git push -f origin HEAD:<exercise>`). The server runs a hidden verification hook, replies `PASSED`/`FAILED` and, on success, tells you the next exercise. |
 | `git start next` | Asks the server which exercise to do next and starts it. |
 
-You are identified on the server by the committer e-mail used in your commits, so I kept the same
-`user.name` / `user.email` throughout.
+The server uses the committer email to identify the submissions, so I kept my Git config consistent.
 
-The exercises are completed in this order:
+I completed the exercises in this order:
 `master`, `commit-one-file`, `commit-one-file-staged`, `ignore-them`, `chase-branch`,
 `merge-conflict`, `save-your-work`, `change-branch-history`, `remove-ignored`,
 `case-sensitive-filename`, `fix-typo`, `forge-date`, `fix-old-typo`, `commit-lost`,
@@ -31,10 +33,7 @@ The exercises are completed in this order:
 git verify
 ```
 
-**Explanation:** `git start`/`configure.sh` creates a first commit containing a file named `test.txt`
-with the content `test`. This exercise only asks you to *push* that commit, which is exactly what
-`git verify` does. The server checks that the pushed commit contains exactly one file `test.txt` with
-the content `test`.
+**What I understood:** This one was basically a warm-up. The setup already gives us `test.txt`, so I just had to verify/push the existing commit. The server checks that the expected file and content are there.
 
 ## 2. commit-one-file
 
@@ -45,10 +44,7 @@ git commit -m "Commit A.txt file"
 git verify
 ```
 
-**Explanation:** Two new files `A.txt` and `B.txt` exist but neither is tracked. `git add A.txt` puts
-only `A.txt` into the staging area (the "index"), and `git commit` snapshots exactly what is staged —
-so the commit contains only `A.txt`, while `B.txt` stays untracked. The server accepts a commit that
-adds exactly one of the two files.
+**What I understood:** Both files were there, but I only needed to commit `A.txt`. `git add` stages a specific file, and `git commit` only includes what is staged, so `B.txt` stays untouched.
 
 ## 3. commit-one-file-staged
 
@@ -59,9 +55,7 @@ git commit -m "Commit B.txt file"
 git verify
 ```
 
-**Explanation:** Here both files are *already* staged. `git reset A.txt` (mixed reset on one path)
-removes only `A.txt` from the index, leaving `B.txt` staged. `git commit` then only records
-`B.txt`. This is the flip side of the previous level.
+**What I understood:** This was the reverse of the previous one. Both files were staged already, so I used `git reset A.txt` to unstage only `A.txt`, then committed `B.txt`.
 
 ## 4. ignore-them
 
@@ -73,11 +67,7 @@ git commit -m "Ignore binary files"
 git verify
 ```
 
-**Explanation:** A `.gitignore` file defines patterns that Git should never track. `*.o`, `*.exe` and
-`*.jar` ignore every file with those extensions, and `libraries/` ignores the whole directory
-(including files inside it, e.g. `libraries/external-library.jar`). The server verifies the rules with
-`git check-ignore` — including that `libraries/` (with slash) doesn't ignore a file literally named
-`libraries`.
+**What I understood:** I created a `.gitignore` for the required file types and the `libraries/` folder. The important part here was that the slash makes `libraries/` a directory rule.
 
 ## 5. chase-branch
 
@@ -87,9 +77,7 @@ git merge escaped
 git verify
 ```
 
-**Explanation:** `escaped` has two extra commits on top of `chase-branch` (`chase-branch` is its
-ancestor), so `git merge escaped` fast-forwards and re-points `chase-branch` at `escaped`'s tip, giving
-us the two extra commits.
+**What I understood:** `escaped` was already ahead of the current branch, so merging it was just a fast-forward. No new merge commit was needed.
 
 ## 6. merge-conflict
 
@@ -103,12 +91,7 @@ git commit --no-edit
 git verify
 ```
 
-**Explanation:** Both branches changed the same line of `equation.txt`, so the merge cannot apply
-automatically and Git marks the file with conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`). We
-resolve it by hand — writing the sensible combination `2+3=5` — then `git add` the resolved file to
-say "conflict is over" and `git commit --no-edit` finishes the merge commit (using the default merge
-message). The server checks the last commit is a real merge commit (two parents) whose file resolves
-to `2+3=5`.
+**What I understood:** Both branches changed the same line, so Git stopped with a conflict. I fixed `equation.txt` manually, staged it, and completed the merge. This was my first proper conflict-resolution exercise.
 
 ## 7. save-your-work
 
@@ -123,12 +106,7 @@ git commit -am "Finish my work"
 git verify
 ```
 
-**Explanation:** Uncommitted work-in-progress in two files blocks us from making a clean bug-fix
-commit. `git stash` shelves both modified files and restores the working tree to `HEAD`. After the
-bugfix commit (`git commit -am` stages tracked-file changes, amending so only `bug.txt` is committed),
-`git stash pop` reapplies the saved work. We then append the finishing line and commit everything with
-`-am` (both `bug.txt` and `program.txt`). The server checks the fix commit removes only the bug line
-(4 remaining lines) and the last commit contains 2 files with 7 lines ending in "Finally, finished it!".
+**What I understood:** I had unfinished work that I didn't want mixed into the bug fix. `git stash` let me temporarily put that work aside, make the fix, and then bring my changes back with `git stash pop`.
 
 ## 8. change-branch-history
 
@@ -153,9 +131,7 @@ git commit -am "Remove the file that should have been ignored"
 git verify
 ```
 
-**Explanation:** `ignored.txt` is still tracked because it was committed *before* the `.gitignore`
-rule was added — ignore rules only affect untracked files. `git rm` removes the file from both the
-working tree and the index, so the deletion commit untracks it.
+**What I understood:** `.gitignore` doesn't magically remove files that Git is already tracking. Since `ignored.txt` was already tracked, I had to remove it with `git rm`.
 
 ## 10. case-sensitive-filename
 
@@ -166,9 +142,7 @@ git commit -am "Lowercase file.txt"
 git verify
 ```
 
-**Explanation:** A plain `mv` + `git add` would often be seen as delete+add on case-insensitive
-filesystems. `git mv` moves and stages in one atomic step and records it as a *rename*. The server
-checks the commit's tree contains `file.txt` and no `File.txt`.
+**What I understood:** This was about changing only the filename's capitalization. `git mv` handled the rename and staged it at the same time.
 
 ## 11. fix-typo
 
@@ -180,10 +154,7 @@ git commit -a --amend
 git verify
 ```
 
-**Explanation:** The typo is in the *last* commit, so we don't need a new commit. `git commit --amend`
-replaces the last commit in place. `-a` stages the file change first; the editor lets us fix the
-commit message too. The server requires BOTH the fixed content (`Hello world`) and the fixed message
-(`Add Hello world`).
+**What I understood:** The typo was in the latest commit, so making another commit wasn't necessary. I amended the previous commit and fixed both the file and the commit message.
 
 ## 12. forge-date
 
@@ -193,9 +164,7 @@ git commit --amend --no-edit --date="1987-08-03"
 git verify
 ```
 
-**Explanation:** `--amend` replaces the last commit; `--date` sets the commit's *author* date to 1987
-(`--no-edit` keeps the message). The server reads the author date (`%ai`) and wants it to start with
-`1987`.
+**What I understood:** This one was about changing the author date of the latest commit. `--amend` rewrites the commit and `--date` sets the required date.
 
 ## 13. fix-old-typo
 
@@ -215,12 +184,7 @@ git rebase --continue
 git verify
 ```
 
-**Explanation:** The typo is two commits back, so `git commit --amend` alone can't reach it. An
-interactive rebase (`git rebase -i HEAD~2`) lists the last two commits; marking the typo commit as
-`edit` makes Git stop right after applying it. We fix the file, `git commit --amend -m "Add Hello
-world"` rewrites that commit (content + message), and `git rebase --continue` replays the newer commit
-on top — producing a tiny conflict because that commit was built on the old typo. The server checks
-both commits: the oldest with the fixed message/content and the newest containing the full correct text.
+**What I understood:** The bad commit wasn't the latest one, so I used interactive rebase. I marked the older commit as `edit`, fixed it, amended it, and continued the rebase. The newer commit then had a small conflict because it was based on the old version.
 
 ## 14. commit-lost
 
@@ -232,10 +196,7 @@ git reset --hard HEAD@{1}
 git verify
 ```
 
-**Explanation:** `git commit --amend` doesn't delete the old commit — it just makes it unreachable.
-`git reflog` lists every position `HEAD` has been in, including the original "Very imporant piece of
-work" commit. `git reset --hard HEAD@{1}` points the branch back at that lost commit. The server
-verifies the pushed commit contains the good version (`This is the good version of a file.`).
+**What I understood:** I learned that an amended commit isn't instantly gone. `git reflog` keeps track of previous `HEAD` positions, so I could find the old commit and reset back to it.
 
 ## 15. split-commit
 
@@ -249,10 +210,7 @@ git commit -m "Second.txt"
 git verify
 ```
 
-**Explanation:** One commit contains two unrelated files. `git reset HEAD^` (mixed reset) moves the
-branch back one commit while keeping the changes in the working tree and index, effectively "undoing"
-the commit but not the work. We then re-stage and re-commit the files one at a time. The server
-expects commit 1 to add `first.txt` and commit 2 to add `second.txt`.
+**What I understood:** One commit had two separate changes. I reset the commit while keeping the actual changes, then staged and committed each file separately.
 
 ## 16. too-many-commits
 
@@ -263,9 +221,7 @@ git rebase -i HEAD~2
 git verify
 ```
 
-**Explanation:** Two tiny commits should be one. A fixup (`f`) squashes the second commit into the
-first and just *discards* its message, keeping `Add file.txt` as the single commit message. The server
-checks there is now exactly one commit named `Add file.txt` containing the two lines.
+**What I understood:** There were two commits that should really have been one. I used interactive rebase with `fixup` to combine them while keeping the first commit message.
 
 *(Alternative without an editor: `git reset --soft HEAD~2 && git commit -m "Add file.txt"` — the
 `--soft` reset moves the branch back two commits but keeps the index, so the new single commit has the
@@ -280,10 +236,7 @@ git commit -m "Make script.sh executable"
 git verify
 ```
 
-**Explanation:** Git records a file's mode (`100644` = normal, `100755` = executable). `git
-update-index --chmod=+x` changes the *index* mode of `script.sh` to executable without touching the
-working-tree file, and the commit stores it. The server checks the committed mode of `script.sh`
-contains `755`.
+**What I understood:** Git also stores whether a file is executable. `git update-index --chmod=+x` changed the file mode to executable and the commit saved that change.
 
 ## 18. commit-parts
 
@@ -300,12 +253,7 @@ git commit -am "The rest of the changed"
 git verify
 ```
 
-**Explanation:** All changes are in ONE file, so we can't split them across commits with paths. `git
-add -p` (patch mode) walks through the diff hunk by hunk and lets us stage a *part* of the file: `y`
-stages a hunk, `n` skips it. First we stage only the "Task 1" related lines and commit them, then
-`git commit -am` commits the remaining hunks (the `It works!` rewording and the "Task 2" line). The
-server checks the intermediate commit has 7 lines ending in `Task 1 is finished.` and the final commit
-a 9-line file ending in `It works!`.
+**What I understood:** This was one of the more interesting ones. Everything was in one file, but the changes needed to be split into two commits. `git add -p` let me choose which parts of the diff to stage.
 
 ## 19. pick-your-features
 
@@ -326,11 +274,7 @@ git cherry-pick --continue
 git verify
 ```
 
-**Explanation:** We want to bring single commits from three topic branches onto `pick-your-features`
-without merging the branches themselves. `git cherry-pick` applies the *changes* of a commit as a new
-commit on the current branch. `feature-a` and `feature-b` apply cleanly; `feature-c` conflicts because
-it was branched from the base, not from our current state — we resolve by keeping all six lines in the
-right order. The server checks all three features appear as single commits in the final 6-line file.
+**What I understood:** I needed selected commits from three different branches, not the whole branches. `git cherry-pick` was perfect for that. `feature-c` caused a conflict, which I resolved manually before continuing.
 
 ## 20. rebase-complex
 
@@ -340,10 +284,7 @@ git rebase issue-555 --onto your-master
 git verify
 ```
 
-**Explanation:** We need only the two bug-fix commits (`rebase-complex`'s own commits) moved on top of
-`your-master`, leaving every `issue-555` commit out. `git rebase --onto <newbase> <upstream>` replays
-only the commits after `<upstream>` (here `issue-555`) onto `<newbase>` (here `your-master`), in a
-single command. The server checks the final 5-commit history/messages match the expected order.
+**What I understood:** This one needed a slightly more specific rebase. `--onto` let me take only the commits I wanted and move them onto `your-master`, skipping the `issue-555` history.
 
 ## 21. invalid-order
 
@@ -403,30 +344,29 @@ commit contains `jackass` while its parent does not.
 
 ---
 
-## Challenges faced & how I resolved them
+## Things that confused me
 
-1. **`git add -p` hunk splitting (commit-parts)** — the whole `file.txt` diff comes as one hunk and
-   the "Task 2" line is grouped with the `It works!` change. I used `s` to split it into 4 sub-hunks
-   and stage them selectively (`y/y/n/y`); splitting made choosing exactly the Task-1 lines possible.
+1. **`git add -p`** — At first the changes were grouped together, so I had to use `s` to split the hunks and then choose what to stage with `y`/`n`.
 
-2. **`git cherry-pick feature-c` conflict (pick-your-features)** — feature C was branched from the
-   base, not from my current branch, so it clashed with `feature-a`'s line. I resolved by keeping both
-   sides of the file in the correct order and `git cherry-pick --continue`-d.
+2. **Cherry-pick conflict** — `feature-c` conflicted with the changes already on my branch. I kept the required lines and continued the cherry-pick.
 
-3. **Rewriting old commits with interactive rebase (fix-old-typo, invalid-order, too-many-commits,
-   find-swearwords)** — the todo list and the editor defaults were confusing at first. I found it
-   easier to explicitly `edit`/`fixup` the exact lines and to verify with `git log --oneline` before
-   running `git verify`.
+3. **Interactive rebase** — The rebase todo list was confusing at first, especially when using `edit` and `fixup`. Checking `git log --oneline` after each change helped a lot.
 
-4. **Automating the search (find-bug)** — searching 300 base64 commits by hand is impossible. Using
-   `git bisect run` with a tiny decode-and-grep test turned a manual nightmare into a 10-step binary
-   search.
+4. **Finding the bug in history** — The last task would have been horrible manually. `git bisect run` reduced it to a small automated search.
 
-5. **Lost commits (commit-lost)** — I forgot that `git commit --amend` leaves the old commit in the
-   object database; `git reflog` revealing every previous `HEAD` position made recovery trivial.
+5. **Lost commits** — I didn't realize `git reflog` could recover the previous `HEAD` so easily. That was a useful thing to learn.
 
 ---
 
 ## Proof of completion
 
 ![Proof of completion](Congratulations.png)
+
+## What I got from this task
+
+This task started pretty simple, but the later exercises got much more interesting.
+I got to use things I hadn't really used before, especially `rebase`, `reflog`, `cherry-pick`,
+`git add -p` and `git bisect`.
+
+The biggest takeaway for me is that Git is not just about `add`, `commit` and `push`.
+Being able to actually understand and change history is a completely different level of Git.
