@@ -474,5 +474,3 @@ Merge Conflict ................. Resolved
 Repository ..................... Restored
 History ........................ Preserved
 ```
-
-The One Piece was found.
