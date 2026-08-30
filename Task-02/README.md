@@ -59,7 +59,7 @@ ONE_PIECE{GITO_GITO_NO_AWAKENING}
 
 ## Screenshot
 
-![Level 1](level1.png)
+![Level 1](Logbook/level1.png)
 
 ---
 
@@ -118,7 +118,7 @@ BAROQUE_DIAL{SPLIT_TIMELINE_MISDIRECTION}
 
 ## Screenshot
 
-![Level 2](level2.png)
+![Level 2](Logbook/level2.png)
 
 ---
 
@@ -180,7 +180,7 @@ KjY2MjF4bW0lKzYqNyBsIS0vbTAtJTcnL
 
 ## Screenshot
 
-![Level 3](level3.png)
+![Level 3](Logbook/level3.png)
 
 ---
 
@@ -238,7 +238,7 @@ SwnbzptDiM3JSpvFiMuJ28PJzAlJ28VIzA=
 
 ## Screenshot
 
-![Level 4](level4.png)
+![Level 4](Logbook/level4.png)
 
 ---
 
@@ -299,7 +299,7 @@ This repository became the starting point for the final merge challenge.
 
 ## Screenshot
 
-![Level 5](level5.png)
+![Level 5](Logbook/level5.png)
 
 ---
 
@@ -392,7 +392,7 @@ FLAG{The_Grand_Line_Remembers_Your_Commit}
 
 ## Screenshot
 
-![Level 6](level6.png)
+![Level 6](Logbook/level6.png)
 
 ---
 
