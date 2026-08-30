@@ -1,1 +1,3 @@
-# Task-00
+# Task-00: Install Linux
+
+![Linux Installation](Linux.png)
