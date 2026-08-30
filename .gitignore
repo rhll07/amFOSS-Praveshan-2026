@@ -1,0 +1,9 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Python virtual environments
+.venv/
+venv/
+
+Task-11/timeflow_wallpaper_*.png
